@@ -3,19 +3,18 @@
         <div class="title">外卖用户总数</div>
         <div class="title2">User Total Count</div>
 
-        <div class="userTotalCount"> <count-to :start-val="startVal" :end-val="Number(Alluserdata.userToday)"
-                :duration="1000" separator="," autoplay /></div>
+        <div class="userTotalCount"> <count-to :start-val="startVal" :end-val="EndVal" :duration="1000" separator=","
+                autoplay /></div>
         <div class="percent-text">
             <div class="percent-text1">
                 每日增长率：
-                <count-to :start-val="startPercent" :end-val="Number(Alluserdata.userGrowthLastDay)" :duration="1000"
-                    :decimals="2" suffix="%" />
+                <count-to :start-val="startPercent" :end-val="startPercentEnd" :duration="1000" :decimals="2" suffix="%" />
 
             </div>
             <div class="percent-text2">
                 每月增长率：
-                <count-to :start-val="startPercent1" :end-val="Number(Alluserdata.userGrowthLastMonth)" :duration="1000"
-                    :decimals="2" suffix="%" />
+                <count-to :start-val="startPercent1" :end-val="startPercent1End" :duration="1000" :decimals="2"
+                    suffix="%" />
             </div>
         </div>
         <div class="percent">
@@ -27,15 +26,26 @@
 </template>
 
 <script setup >
-import { ref } from 'vue'
+import { ref, watch } from 'vue'
 import { storeToRefs } from 'pinia'
 import useAllUserData from '@/store/Module/AllUserdata';
 import { CountTo } from 'vue3-count-to';
 const AllUserData = useAllUserData()
 const { Alluserdata } = storeToRefs(AllUserData)
 const startPercent = ref(0)
+const startPercentEnd = ref(0)
 const startPercent1 = ref(0)
+const startPercent1End = ref(0)
 const startVal = ref(0)
+const EndVal = ref(0)
+watch(() => Alluserdata.value, (newData) => {
+    startVal.value = Number(EndVal.value)
+    EndVal.value = Number(newData.userToday)
+    startPercent.value = Number(startPercentEnd.value)
+    startPercentEnd.value = Number(newData.userGrowthLastDay)
+    startPercent1.value = Number(startPercent1End.value)
+    startPercent1End.value = Number(newData.userGrowthLastMonth)
+})
 </script>
 
 <style scoped lang="scss">

@@ -19,9 +19,9 @@
             <!-- <VueEcharts :data="cahrtdata"></VueEcharts> -->
         </div>
         <div class="average-data-wrapper">
-            <div class="average-data" v-for="(item, index) in Alluserdata.age" :key="index">
+            <div class="average-data" v-for="(item, index) in ageData" :key="index">
                 <div class="average-data-value">
-                    <count-to :startVal="item.startValue" :endVal="item.value" :duration="1000" />
+                    <count-to :startVal="item.startValue" :endVal="item.EndValue" :duration="1000" />
                 </div>
                 <div class="average-data-axis">
                     <div :style="{ backgroundColor: color[index] }" class="point" />
@@ -42,85 +42,99 @@ const AllUserData = useAllUserData()
 const { Alluserdata } = storeToRefs(AllUserData)
 const color = ['rgb(116,166,49)', 'rgb(190,245,99)', 'rgb(202,252,137)', 'rgb(251,253,142)']
 const startAge = ref(0)
+let ageData = [
+
+]
 let dom = null
-watch(() => Alluserdata.value.age, 
-() => {
-    let key = ["指标"]
-    let data = ["年龄分布"]
-    let max = 0
-    Alluserdata.value.age.forEach(element => {
-        data.push(+element.value)
-        max += +element.value
-        key.push(element.key)
-    });
-    let cahrtdata = {
-        opstion: {
-            tooltip: {
-                trigger: 'axis',
-                axisPointer: {
-                    type: 'shadow'
+watch(() => Alluserdata.value.age,
+    () => {
+        let key = ["指标"]
+        let data = ["年龄分布"]
+        let max = 0
+        Alluserdata.value.age.forEach(element => {
+            data.push(+element.value)
+            max += +element.value
+            key.push(element.key)
+            ageData.push({ key: element.key, startValue: 0, EndValue: element.value })
+            ageData.filter(item => item.key === element.key)
+                .map(item => {
+                    item.startValue = item.EndValue
+                    item.EndValue = element.value
+                    return item
+                });
+            if (ageData.length > 4) {
+                ageData.splice(4, ageData.length - 4)
+            }
+
+        });
+        let cahrtdata = {
+            opstion: {
+                tooltip: {
+                    trigger: 'axis',
+                    axisPointer: {
+                        type: 'shadow'
+                    },
+                    textStyle: {
+                        fontSize: 28
+                    },
+                    padding: 10
                 },
-                textStyle: {
-                    fontSize: 28
+                color,
+                dataset: {
+                    source: [
+                        key = key,
+                        data = data
+                    ]
                 },
-                padding: 10
-            },
-            color,
-            dataset: {
-                source: [
-                    key = key,
-                    data = data
-                ]
-            },
-            grid: {
-                left: 40,
-                right: 40,
-                top: 0
-            },
-            xAxis: {
-                splitLine: { show: false },
-                type: "value",
-                max: max,
-                axisLine: {
-                    lineStyle: {
-                        color: 'rgb(50,51,53)',
-                        width: 3
+                grid: {
+                    left: 40,
+                    right: 40,
+                    top: 0
+                },
+                xAxis: {
+                    splitLine: { show: false },
+                    type: "value",
+                    max: max,
+                    axisLine: {
+                        lineStyle: {
+                            color: 'rgb(50,51,53)',
+                            width: 3
+                        }
+                    },
+                    axisTick: { show: false },
+                    axisLabel: {
+                        color: 'rgb(98,105,113)',
+                        fontSize: 18
                     }
                 },
-                axisTick: { show: false },
-                axisLabel: {
-                    color: 'rgb(98,105,113)',
-                    fontSize: 18
-                }
-            },
-            yAxis: {
-                type: "category",
-                show: false
+                yAxis: {
+                    type: "category",
+                    show: false
 
+                },
+                series: [
+                    {
+                        type: "bar",
+                        stack: "total",
+                        barWidth: 15
+                    },
+                    {
+                        type: "bar",
+                        stack: "total"
+                    },
+                    {
+                        type: "bar",
+                        stack: "total"
+                    }, {
+                        type: "bar",
+                        stack: "total"
+                    }
+                ],
             },
-            series: [
-                {
-                    type: "bar",
-                    stack: "total",
-                    barWidth: 15
-                },
-                {
-                    type: "bar",
-                    stack: "total"
-                },
-                {
-                    type: "bar",
-                    stack: "total"
-                }, {
-                    type: "bar",
-                    stack: "total"
-                }
-            ],
-        },
-        ThemeColor: "dark"
-    }
-    dom.setOption(cahrtdata.opstion)
-})
+            ThemeColor: "dark"
+        }
+        dom.setOption(cahrtdata.opstion)
+    })
 
 
 

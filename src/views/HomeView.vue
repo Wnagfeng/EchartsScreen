@@ -26,7 +26,9 @@
             <div class="left3">
               <TotalDevice></TotalDevice>
             </div>
-            <div class="left4"></div>
+            <div class="left4">
+              <TotalGender></TotalGender>
+            </div>
             <div class="left5"></div>
             <div class="left6"></div>
           </div>
@@ -55,16 +57,15 @@
 
 <script setup>
 import { ref, onMounted } from 'vue'
-import { storeToRefs } from "pinia"
 import useAllUserData from '../store/Module/AllUserdata'
 import TopHeader from '../components/TopHeader/index'
 import Separator from '../components/Separator/index'
 import TotalUsers from '../components/TotalUsers/index'
 import AverageAge from '../components/AverageAge/index'
 import TotalDevice from '../components/TotalDevice/index'
+import TotalGender from '../components/Totalgender/index'
 const isSHow = ref(false)
 const AllUserData = useAllUserData()
-const { } = storeToRefs(AllUserData)
 onMounted(() => {
   AllUserData.FetchGetAllUserData()
   AllUserData.FetchGetAllUserDatasetInterval()
@@ -83,7 +84,6 @@ onMounted(() => {
   height: 100%;
   background: rgb(29, 29, 29);
 
-  .separator-wrapper {}
 
   .center {
     width: 100%;
