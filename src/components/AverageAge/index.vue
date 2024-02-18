@@ -43,7 +43,8 @@ const { Alluserdata } = storeToRefs(AllUserData)
 const color = ['rgb(116,166,49)', 'rgb(190,245,99)', 'rgb(202,252,137)', 'rgb(251,253,142)']
 const startAge = ref(0)
 let dom = null
-watch(() => Alluserdata.value.age, () => {
+watch(() => Alluserdata.value.age, 
+() => {
     let key = ["指标"]
     let data = ["年龄分布"]
     let max = 0

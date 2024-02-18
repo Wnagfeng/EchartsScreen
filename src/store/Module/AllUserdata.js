@@ -8,7 +8,9 @@ const useAllUserData = defineStore("AllUsersData", {
                 userGrowthLastDay: 0,
                 userGrowthLastMonth: 0,
                 averageAge: 0,
-                age: []
+                age: [],
+                totalDevices: 0,
+                devices: []
             }
         }
     },
