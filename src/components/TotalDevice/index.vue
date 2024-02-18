@@ -14,7 +14,7 @@
                 </div>
                 <div class="count">
                     <div class="num">
-                        <count-to :startVal="startAge" :endVal="Alluserdata.totalDevices" :duration="1000" />
+                        <count-to :startVal="startNum" :endVal="endNum" :duration="1000" />
                     </div>
                     <div class="text">
                         台
@@ -23,9 +23,9 @@
             </div>
             <div class="bottom">
                 <div class="average-data-wrapper">
-                    <div class="average-data" v-for="(item, index) in Alluserdata.devices" :key="index">
+                    <div class="average-data" v-for="(item, index) in devices" :key="index">
                         <div class="average-data-value">
-                            <count-to :startVal="item.startValue" :endVal="item.value" :duration="1000" />
+                            <count-to :startVal="item.startValue" :endVal="item.EndValue" :duration="1000" />
                         </div>
                         <div class="average-data-axis">
                             <div :style="{ backgroundColor: color[index] }" class="point" />
@@ -47,10 +47,14 @@ import { storeToRefs } from 'pinia'
 import useAllUserData from '@/store/Module/AllUserdata';
 const AllUserData = useAllUserData()
 const { Alluserdata } = storeToRefs(AllUserData)
-const startAge = ref(0)
+const startNum = ref(0)
+const endNum = ref(0)
+let devices = [
+
+]
 const color = ['rgb(116,166,49)', 'rgb(190,245,99)', 'rgb(202,252,137)', 'rgb(251,253,142)']
 let dom = null
-watch(() => Alluserdata.value.devices, () => {
+watch(() => Alluserdata.value.devices, (newdata) => {
     let Opstiondata = []
     let opstion = {
         tooltip: {
@@ -93,10 +97,23 @@ watch(() => Alluserdata.value.devices, () => {
                 "color": color[index]
             }
         })
+        devices.push({ key: element.key, startValue: 0, EndValue: element.value })
+        devices.filter(item => item.key === element.key)
+            .map(item => {
+                item.startValue = item.EndValue
+                item.EndValue = element.value
+                return item
+            });
+        if (devices.length > 3) {
+            devices.splice(3, devices.length - 3)
+        }
     });
     dom.setOption(opstion)
 })
-
+watch(() => Alluserdata.value.totalDevices, (newData) => {
+    startNum.value = Number(endNum.value)
+    endNum.value = Number(newData)
+})
 onMounted(() => {
     dom = echarts.init(document.getElementById("leftCharts"))
 })

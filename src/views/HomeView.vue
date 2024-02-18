@@ -29,7 +29,9 @@
             <div class="left4">
               <TotalGender></TotalGender>
             </div>
-            <div class="left5"></div>
+            <div class="left5">
+              <LineCharts></LineCharts>
+            </div>
             <div class="left6"></div>
           </div>
           <div class="right">
@@ -64,6 +66,7 @@ import TotalUsers from '../components/TotalUsers/index'
 import AverageAge from '../components/AverageAge/index'
 import TotalDevice from '../components/TotalDevice/index'
 import TotalGender from '../components/Totalgender/index'
+import LineCharts from '../components/LineCahrts/index'
 const isSHow = ref(false)
 const AllUserData = useAllUserData()
 onMounted(() => {

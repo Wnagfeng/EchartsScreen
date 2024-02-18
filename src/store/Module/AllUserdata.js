@@ -11,7 +11,8 @@ const useAllUserData = defineStore("AllUsersData", {
                 age: [],
                 totalDevices: 0,
                 devices: [],
-                gender: []
+                gender: [],
+                rider: []
             }
         }
     },
