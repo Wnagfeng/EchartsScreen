@@ -32,20 +32,33 @@
             <div class="left5">
               <LineCharts></LineCharts>
             </div>
-            <div class="left6"></div>
+            <div class="left6">
+              <BarChart></BarChart>
+            </div>
           </div>
           <div class="right">
-            <div class="right-top1"></div>
-            <div class="right-top2"></div>
+            <div class="right-top1">
+              <CenterHeadaer></CenterHeadaer>
+            </div>
+            <div class="right-top2">
+              <countryCatrgory :data="['ALL', '北京', '上海', '深圳', '杭州', '南京', '武汉']"></countryCatrgory>
+            </div>
             <div class="right-bottom">
               <div class="right-left">
-                <div class="right-left1"></div>
-                <div class="right-left2"></div>
+                <div class="right-left1">
+
+                </div>
+                <div class="right-left2">
+                  <countryCatrgory :data="['订单量', '销售额', '用户数', '退单量']"
+                    :color="['rgb(178, 209, 126)', 'rgb(116, 166, 49)']" />
+                </div>
                 <div class="right-left3"></div>
                 <div class="right-left4"></div>
               </div>
               <div class="right-right">
-                <div class="right-right1"></div>
+                <div class="right-right1">
+                  <PlanList></PlanList>
+                </div>
                 <div class="right-right2"></div>
               </div>
 
@@ -67,6 +80,10 @@ import AverageAge from '../components/AverageAge/index'
 import TotalDevice from '../components/TotalDevice/index'
 import TotalGender from '../components/Totalgender/index'
 import LineCharts from '../components/LineCahrts/index'
+import BarChart from '../components/BarCharts/index'
+import CenterHeadaer from '../components/CenterHeder/index'
+import countryCatrgory from '../components/countryCategory/index'
+import PlanList from '../components/planList/index'
 const isSHow = ref(false)
 const AllUserData = useAllUserData()
 onMounted(() => {
@@ -148,7 +165,7 @@ onMounted(() => {
     .right {
       flex: 1;
       height: 100%;
-      background: rgb(60, 61, 64);
+      background: rgb(100, 101, 103);
       display: flex;
       flex-direction: column;
 
@@ -182,13 +199,13 @@ onMounted(() => {
           }
 
           .right-left2 {
-            height: 80px;
+            height: 48px;
             margin-top: 15px;
             background-color: aqua;
           }
 
           .right-left3 {
-            height: 350px;
+            height: 380px;
             margin-top: 10px;
             background-color: beige;
           }
@@ -209,7 +226,6 @@ onMounted(() => {
           .right-right1 {
             width: 100%;
             height: 999px;
-            padding-right: 10px;
             box-sizing: border-box;
             background-color: rgb(255, 128, 0);
           }

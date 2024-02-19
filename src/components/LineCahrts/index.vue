@@ -1,7 +1,7 @@
 <template>
     <div class="line-chart">
         <div class="title-wrapper">
-            <div class="title">慕课外卖骑手概况</div>
+            <div class="title">骑手概况</div>
             <div class="sub-title">Rider Growth rate</div>
         </div>
         <div id="ChartsLIne" />
@@ -41,7 +41,7 @@ watch(() => Alluserdata.value.rider, (Newdata) => {
             trigger: 'axis'
         },
         legend: {
-            top: 5,
+            top: 0,
             right: 40,
             icon: 'rect',
             textStyle: {

@@ -12,7 +12,12 @@ const useAllUserData = defineStore("AllUsersData", {
                 totalDevices: 0,
                 devices: [],
                 gender: [],
-                rider: []
+                rider: [],
+                category: [],
+                salesToday: 0,//今日销售额
+                orderToday: 0,//今日订单量
+                orderUser: 0,//今日交易用户数
+                userToday: 0//今日新增用户数
             }
         }
     },
