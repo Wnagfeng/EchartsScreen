@@ -46,7 +46,6 @@
             <div class="right-bottom">
               <div class="right-left">
                 <div class="right-left1">
-                  <BaseScoreList :config="config"></BaseScoreList>
                 </div>
                 <div class="right-left2">
                   <countryCatrgory :data="['订单量', '销售额', '用户数', '退单量']"
@@ -86,67 +85,7 @@ import countryCatrgory from '../components/countryCategory/index'
 import PlanList from '../components/planList/index'
 const isSHow = ref(false)
 const AllUserData = useAllUserData()
-const config = {
-  headerdata: ["姓名", "年龄", "薪资"],
-  headerStyle: [{ color: "red" }, { color: "blue" }],
-  headerBGC: 'rgb(90,90,90)',
-  headerheight: 80,
-  headerIndex: true,
-  headerindexContent: "%",
-  headerIndexStyle: {
-    color: "#bfa",
-    width: "200px"
-  },
-  RowsData: [
-    ["张三", "25", "8000"],
-    ["李四", "30", "12000"],
-    ["王五", "28", "9000"],
-    ["赵六", "33", "15000"],
-    ["钱七", "27", "10000"],
-    ["孙八", "24", "7500"],
-    ["周九", "32", "11000"],
-    ["吴十", "29", "9500"],
-    ["郑十一", "31", "13000"],
-    ["马十二", "26", "8500"],
-    ["陈十三", "28", "9000"],
-    ["黄十四", "29", "9500"],
-    ["林十五", "27", "10000"],
-    ["张十六", "34", "16000"],
-    ["李十七", "30", "12000"],
-    ["王十八", "25", "8000"],
-    ["赵十九", "33", "15000"],
-    ["钱二十", "26", "8500"],
-    ["孙二十一", "24", "7500"],
-    ["周二十二", "31", "13000"],
-    ["吴二十三", "28", "9000"],
-    ["郑二十四", "32", "11000"],
-    ["马二十五", "29", "9500"],
-    ["陈二十六", "27", "10000"],
-    ["黄二十七", "28", "9000"],
-    ["林二十八", "30", "12000"],
-    ["张二十九", "33", "15000"],
-    ["李三十", "26", "8500"],
-    ["王三十一", "29", "9500"],
-    ["赵三十二", "31", "13000"]
-  ],
-  RowNumber: 10,
-  Rowstyle: [{ color: "red" }, { color: "blue" }],
-  RowIndexStyle: {
-    color: "#bfa",
-    width: "200px"
-  },
-  RowBg: [["rgb(40,40,40)"], ["rgb(55,55,55)"]],
-  alings: ["center", 'center'],
-  // 头部文字大小
-  headerFontsize: 50,
-  // 内容列样式
-  rowFontsize: 50,
-  headerColor: 'red',
-  rowColor: "#fff",
-  MoveNumber: 1,
-  duration: 5000
 
-}
 onMounted(() => {
   AllUserData.FetchGetAllUserData()
   AllUserData.FetchGetAllUserDatasetInterval()
@@ -163,14 +102,16 @@ onMounted(() => {
 .HomeWrapper {
   width: 100%;
   height: 100%;
+  // background-color: rgb(50, 47, 48);
   background: rgb(29, 29, 29);
+  color: #fff;
+  font-size: 48px;
+
 
 
   .center {
-    width: 100%;
-    height: 100%;
-    display: flex;
     flex: 1;
+    display: flex;
 
     .left {
       flex: 0 0 860px;
@@ -178,9 +119,10 @@ onMounted(() => {
       flex-direction: column;
       width: 860px;
       height: 100%;
-      margin: 0 15px;
+      margin: 0 10px;
       box-sizing: border-box;
-      background: rgb(118, 119, 121);
+      background: rgb(60, 61, 64);
+
 
       .left1,
       .left2,
@@ -225,10 +167,12 @@ onMounted(() => {
 
     .right {
       flex: 1;
-      height: 100%;
-      background: rgb(100, 101, 103);
       display: flex;
       flex-direction: column;
+      height: 100%;
+      margin: 0 10px;
+      max-width: 2960px;
+      overflow: hidden;
 
 
       .right-top1 {
@@ -256,6 +200,7 @@ onMounted(() => {
 
           .right-left1 {
             height: 999px;
+            overflow: hidden;
             background-color: antiquewhite;
           }
 
@@ -287,8 +232,9 @@ onMounted(() => {
           .right-right1 {
             width: 100%;
             height: 999px;
+            // padding: 20px;
             box-sizing: border-box;
-            background-color: rgb(255, 128, 0);
+            background-color: rgb(44, 44, 44);
           }
 
           .right-right2 {
