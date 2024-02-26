@@ -8,12 +8,11 @@
             </template>
         </div>
         <div class="ColumLIst">
-            <template v-for="(item, index) in  CURRENTDATA  " :key="index+item.Rowindex">
+            <template v-for="(item, index) in CityData">
                 <div class="itemWrapper"
-                    :style="{ height: `${COLUMNHEIGHT[index]}px`, lineHeight: `${COLUMNHEIGHT[index]}px`, backgroundColor: item.Rowindex % 2 === 0 ? BGCOLOR2 : BGCOLOR1 }">
-                    <template v-for="(iten, index) in  item.data " :key="item+index">
-                        <div class="item " :aling="align[index]" :style="{ width: `${COLUMNAVERAGEWIDTH[index]}px` }"
-                            v-html="iten"></div>
+                    :style="{ height: `${COLUMNHEIGHT[index]}px`, lineHeight: `${COLUMNHEIGHT[index]}px` }">
+                    <template v-for="(iten, index) in item">
+                        <div class="item" :style="{ width: `${COLUMNAVERAGEWIDTH[index]}px` }" v-html="iten"></div>
                     </template>
                 </div>
             </template>
@@ -42,21 +41,11 @@ const Datalenght = ref(0)
 const CURRENTINDEX = ref(0)
 const CURRENTDATA = ref([])
 const ID = `BaseScorelist+${uuidv4()}`
-const BGCOLOR1 = 'rgb(55,55,55)';
-const BGCOLOR2 = 'rgb(44,44,44)';
-const align = ["center", "center", "center", "center", "center", "center"]
 const { width, height } = init(ID)
 const Handeldata = () => {
     CityData.value.map((item, index) => {
         item.unshift(columnIndex.value[index])
     })
-    const data = CityData.value.map((item, index) => {
-        return {
-            data: item,
-            Rowindex: index
-        }
-    })
-    CityData.value = data
 }
 const HandelHeaderAverageWidth = () => {
     let needAverage = Headerdata.length
@@ -67,10 +56,10 @@ const HandelHeaderAverageWidth = () => {
 }
 const HandelColumnAverageWidth = () => {
     let needAverage = 5
-    const averagewidth = (width.value - 40) / needAverage
+    const averagewidth = (width.value) / needAverage
     COLUMNAVERAGEWIDTH.value = new Array(5)
     COLUMNAVERAGEWIDTH.value.fill(averagewidth)
-    COLUMNAVERAGEWIDTH.value.unshift(50)
+    COLUMNAVERAGEWIDTH.value.unshift(30)
 }
 const HandelAverageHeight = () => {
     const AverageHeight = height.value / columnNumber.value
@@ -87,6 +76,7 @@ const StartAnimation = async () => {
     const index = CURRENTINDEX.value
     // 拿到原先的数据
     const rowdata = cloneDeep(CityData.value)
+    console.log(rowdata.value)
     // 拿到时间
     const titme = 800
     // 将数据头尾链接
@@ -96,8 +86,8 @@ const StartAnimation = async () => {
     rows.push(...rowdata.slice(0, index))
     CURRENTDATA.value = rows
     // 变更高度
-    COLUMNHEIGHT.value = new Array(alldataLenght).fill(AverageHeighT.value)
-    const awaitTime = 500
+    COLUMNHEIGHT.value = new Array(alldataLenght).fill(AVERAGEHEIGHT.value)
+    const awaitTime = 300
     await new Promise(resolve => setTimeout(resolve, awaitTime))
     // 将头部元素设置为0
     COLUMNHEIGHT.value.splice(0, MoveNumber, ...new Array(MoveNumber).fill(0))
@@ -116,11 +106,11 @@ watch(() => Alluserdata.value.areaSales,
         for (let i = 0; i < NewData.length; i++) {
             CityData.value[i] = []
             if (i % 2 === 0) {
-                columnIndex.value[i] = `<div style="width:100%; padding-left=5px; height:100%;display:flex;align-items:center;justify-content:center;background:rgb(44,44,44)">
+                columnIndex.value[i] = `<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;">
             <div style="width:15px;height:15px;background:rgb(72,122,72);border-radius:50%;border:1px solid #fff;"/>
           </div>`
             } else {
-                columnIndex.value[i] = `<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center ; background:rgb(44,44,44)">
+                columnIndex.value[i] = `<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;">
             <div style="width:15px;height:15px;background:rgb(38,88,104);border-radius:50%;border:1px solid #fff;"/>
           </div>`
             }
@@ -145,7 +135,7 @@ watch(() => Alluserdata.value.areaSales,
                     default:
                 }
                 if (j === 1 || j === 3) {
-                    CityData.value[i].push(`<div style="color:rgb(178,209,126)" >${text}</div>`)
+                    CityData.value[i].push(`<div style="color:rgb(178,209,126)">${text}</div>`)
                 } else {
                     CityData.value[i].push(`<div>${text}</div>`)
                 }
@@ -158,7 +148,6 @@ onMounted(() => {
     HandelHeaderAverageWidth()
     HandelColumnAverageWidth()
     HandelAverageHeight()
-    StartAnimation()
 })
 
 </script>
@@ -188,20 +177,13 @@ onMounted(() => {
 
     .ColumLIst {
         .itemWrapper {
-            overflow: hidden;
             display: flex;
             font-size: 30px;
             align-items: center;
-            transition: all 0.3s linear;
 
             .item {
-                width: 100%;
-                height: 100%;
-                overflow: hidden;
+                padding: 10px 0px;
                 text-align: center;
-                // align-items: center;
-                font-size: 20px;
-                // padding: 10px 0px;
             }
         }
 
