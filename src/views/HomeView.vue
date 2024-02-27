@@ -46,7 +46,9 @@
             <div class="right-bottom">
               <div class="right-left">
                 <div class="right-left1">
-                  <test></test>
+                  <!-- <TimeLine></TimeLine> -->
+                  <!-- <test></test> -->
+                  <testMap></testMap>
                 </div>
                 <div class="right-left2">
                   <countryCatrgory :data="['订单量', '销售额', '用户数', '退单量']"
@@ -60,7 +62,7 @@
                   <PlanList></PlanList>
                 </div>
                 <div class="right-right2">
-              
+
                 </div>
               </div>
 
@@ -86,7 +88,8 @@ import BarChart from '../components/BarCharts/index'
 import CenterHeadaer from '../components/CenterHeder/index'
 import countryCatrgory from '../components/countryCategory/index'
 import PlanList from '../components/planList/index'
-import test from '../components/test/index'
+import TimeLine from '../components/testTimeLine/index'
+import testMap from '../components/testMap/index'
 const isSHow = ref(false)
 const AllUserData = useAllUserData()
 
