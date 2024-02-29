@@ -4,7 +4,7 @@
 </template>
 
 <script setup >
-import { onMounted, onUnmounted, ref } from 'vue'
+import { onMounted, onUnmounted, ref, onBeforeMount } from 'vue'
 import * as echarts from 'echarts'
 import data from './chinamapdata.json'//引入我们需要渲染的数据
 import cloneDeep from 'loadsh/cloneDeep'
@@ -53,6 +53,10 @@ const geoCoordMap = {
     '上海': [121.4648, 31.2891]
 }
 // bar数据
+/*
+这里的year事实上有两段数据一个是区域数据一个是城市数据 
+ */
+// 长春的城市销售数据
 const d1 = {
     '江苏': 10041,
     '黑龙江': 4093,
@@ -86,6 +90,7 @@ const d1 = {
     '上海': 2155
 
 }
+// 长春的区域销售数据
 const d2 = {
     '江苏': 0,
     '黑龙江': 0,
@@ -119,6 +124,7 @@ const d2 = {
     '上海': 0
 
 }
+// 青岛的城市销售数据
 const d3 = {
     '江苏': 11788,
     '黑龙江': 1944,
@@ -152,6 +158,7 @@ const d3 = {
     '上海': 1988
 
 }
+// 青岛的区域销售数据
 const d4 = {
     '江苏': 0,
     '黑龙江': 0,
@@ -184,6 +191,7 @@ const d4 = {
     '海南': 0,
     '上海': 0
 }
+// 成都的城市销售数据
 const d5 = {
     '江苏': 159,
     '黑龙江': 5,
@@ -217,6 +225,7 @@ const d5 = {
     '上海': 8
 
 }
+// 成都的区域销售数据
 const d6 = {
     '江苏': 0,
     '黑龙江': 0,
@@ -257,30 +266,36 @@ const colors = [
     ['#DD6B66', '#759AA0', '#E69D87', '#8DC1A9', '#EA7E53', '#EEDD78', '#73A373', '#73B9BC', '#7289AB', '#91CA8C', '#F49F42']
 ]
 const colorIndex = 0
+// 我们需要的城市数据
 const year = ['长春', '长春', '青岛', '青岛', '成都', '成都']
 const categoryData = []
 const barData = []
+// mapdata用于初始化bardata
 const mapData = [
-    [],
-    [],
-    [],
-    [],
-    [],
-    []
+    [],//长春城市数据
+    [],//长春区域数据
+    [],//青岛城市数据
+    [],//青岛区域数据
+    [],//成都城市数据
+    []//成都区域数据
 ]
+//初始化mapdata 从 geoCoordMap中拿到所有的key
 for (var key in geoCoordMap) {
+    // 长春城市的数据
     mapData[0].push({
-        'year': '长春',
+        'year': '长春',//year用于区分各个城市下的区域或者地方数据
         'name': key,
         'value': d1[key] / 100,
         'value1': d1[key] / 100
     })
+    // 长春下各个区域的数据
     mapData[1].push({
         'year': '长春',
         'name': key,
         'value': d1[key] / 100,
         'value1': d2[key] / 100
     })
+    // 以此类推...
     mapData[2].push({
         'year': '青岛',
         'name': key,
@@ -308,14 +323,17 @@ for (var key in geoCoordMap) {
 }
 // 对bar数据的处理
 for (var i = 0; i < mapData.length; i++) {
-    // 排序
+    // 先对mapdata中的数据更据value进行排序
     mapData[i].sort(function sortNumber(a, b) {
         return a.value - b.value
     })
+    // 清空bardata
     barData.push([])
+    // 清空y轴的节点
     categoryData.push([])
     for (var j = 0; j < mapData[i].length; j++) {
         barData[i].push(mapData[i][j].value1)
+        // 添加各个城市的名称用作y轴的节点
         categoryData[i].push(mapData[i][j].name)
     }
 }
@@ -326,6 +344,7 @@ const convertData = function (data) {
         if (geoCoord) {
             res.push({
                 name: data[i].name,
+                // 链接一个value
                 value: geoCoord.concat(data[i].value)
             })
         }
@@ -333,6 +352,11 @@ const convertData = function (data) {
     return res
 }
 // 对飞线图数据的解析
+/**
+ * 
+ * @param {*} data 中心点位置
+ * @param {*} gps 分散点位置
+ */
 const convertToLineData = function (data, gps) {
     const res = []
     for (let i = 0; i < data.length; i++) {
@@ -365,7 +389,7 @@ const isSHowMap = () => {
             autoPlay: true, // 是否自动播放
             inverse: false, // 反向置放timeline
             currentIndex: 0, // 起始位置
-            playInterval: 2000, // 播放间隔
+            playInterval: 5000, // 播放间隔
             symbolSize: [10, 10],
             symbolKeepAspect: true,
             left: "10%",
@@ -439,6 +463,18 @@ const isSHowMap = () => {
             }
         },
         baseOption: {
+            grid: {
+                right: "1.5%",
+                top: "10%",
+                bottom: "10%",
+                width: "20%"
+            },
+            tooltip: {
+                trigger: "axis",
+                axisPointer: {
+                    type: "shadow"
+                }
+            },
             geo: [{
                 map: "jiangshumap",
                 zoom: 1,//初始大小
@@ -480,12 +516,17 @@ const isSHowMap = () => {
                         areaColor: "#389BB7",
                         borderWidth: 0
                     }
+                },
+                label: {
+                    emphasis: {
+                        show: false
+                    }
                 }
             }],
         },
         // 创建图像
         options: [
-            {}, {}
+            // {}, {}
         ],
 
         series: [
@@ -528,14 +569,143 @@ const isSHowMap = () => {
     }
     Charts.setOption(OPSTION.value)
 }
+
 onMounted(() => {
     echarts.registerMap("jiangshumap", data)
-    // convertData()
-    // convertToLineData()
-    console.log(barData)
-    console.log(mapData)
     isSHowMap()
+    for (let i = 0; i < year.length; i++) {
+        let option = cloneDeep(OPSTION.value)
+        option.options.push({
+            title: [
+                {
+                    text: "区域销售大盘",
+                    subtext: "数据由饿了么提供",
+                    letf: "2%%",
+                    top: "2%",
+                    textStyle: {
+                        color: "#fff",
+                        fontSize: 32
+                    },
+                    subtextStyle: {
+                        color: "#fff",
+                        fontSize: 32
+                    }
+                },
+                {
+                    id: "bartitle",
+                    text: `${year[i]}销售情况分析`,
+                    left: "76.5%",
+                    top: "2%",
+                    textStyle: {
+                        color: "#fff",
+                        fontSize: 22
+                    },
+                }
+
+            ],
+            xAxis: {
+                type: "value",
+                position: "top",//放到上方
+                min: 0,//最小刻度为0
+                boundaryGap: false,//
+                splitLine: {
+                    show: false,
+                },
+                axisLine: {
+                    show: false
+                },
+                axisLabel: {
+                    margin: 2,
+                    textStyle: {
+                        color: "#fff"
+                    }
+                }
+            },
+            yAxis: {
+                type: "category",
+                data: categoryData[i],
+                axisLine: {
+                    lineStyle: {
+                        color: "#fff"
+                    }
+                },
+                axisTick: {
+                    show: false
+                },
+                axisLabeL: {
+                    interval: 0,
+                    textStyle: {
+                        color: "#f00"
+                    }
+                }
+            },
+            series: [
+                {
+                    type: "effectScatter",
+                    coordinateSystem: "geo",
+                    data: convertData(mapData[i]),
+                    symbolSize: function (val) {
+                        return val[2] / 10
+                    },
+                    rippleEffect: {
+                        brushType: "fill"
+                    },
+                    hoverAnimation: true,
+                    label: {
+                        normal: {
+                            show: true,
+                            position: "right ",
+                            formatter: function (parmas) {
+                                return parmas.data.name
+
+                            }
+                        }
+                    },
+                    itemStyle: {
+                        normal: {
+                            color: colors[colorIndex][i],
+                            shadowColor: colors[colorIndex][i],
+                            shadowBlur: 10
+                        }
+                    },
+                    zlevel: 1,
+                },
+                {
+                    type: "lines",
+                    data: convertToLineData(mapData[i], geoGpsMap[i + 1]),
+                    effect: {
+                        show: true,
+                        Symbol: "arrow",
+                        preiod: 4,
+                        symbolSize: 4,
+                    },
+                    lineStyle: {
+                        normal: {
+                            color: colors[colorIndex][i],
+                            width: 0.1,
+                            opacity: 0.5,
+                            curveness: 0.3,
+
+                        }
+                    },
+                    zlevel: 2,
+                },
+                {
+                    type: "bar",
+                    data: barData[i],
+                    itemStyle: {
+                        normal: {
+                            color: colors[colorIndex][i]
+                        }
+                    }
+                }
+            ]
+        })
+        OPSTION.value = option
+    }
+    Charts.setOption(OPSTION.value)
 })
+
 </script>
 
 <style scoped lang="scss">

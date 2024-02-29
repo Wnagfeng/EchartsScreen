@@ -46,15 +46,17 @@
             <div class="right-bottom">
               <div class="right-left">
                 <div class="right-left1">
-                  <!-- <TimeLine></TimeLine> -->
-                  <!-- <test></test> -->
                   <testMap></testMap>
                 </div>
                 <div class="right-left2">
                   <countryCatrgory :data="['订单量', '销售额', '用户数', '退单量']"
                     :color="['rgb(178, 209, 126)', 'rgb(116, 166, 49)']" />
                 </div>
-                <div class="right-left3"></div>
+                <div class="right-left3">
+                  <FlyBox>
+                    <RealTimeChart></RealTimeChart>
+                  </FlyBox>
+                </div>
                 <div class="right-left4"></div>
               </div>
               <div class="right-right">
@@ -90,6 +92,7 @@ import countryCatrgory from '../components/countryCategory/index'
 import PlanList from '../components/planList/index'
 import TimeLine from '../components/testTimeLine/index'
 import testMap from '../components/testMap/index'
+import RealTimeChart from '../components/RealTimeLineChart/index'
 const isSHow = ref(false)
 const AllUserData = useAllUserData()
 
@@ -218,9 +221,10 @@ onMounted(() => {
           }
 
           .right-left3 {
+            // width: 100%;
             height: 380px;
             margin-top: 10px;
-            background-color: beige;
+            // background-color: beige;
           }
 
           .right-left4 {
